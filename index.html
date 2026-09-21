@@ -329,10 +329,10 @@
             <!-- Hidden Iframe for Smooth Background Submission -->
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-            <!-- Embedded Google Form Action URL (Clean URL without query params) -->
+            <!-- Embedded Google Form Action URL (Clean base URL without query parameters) -->
             <form id="rsvpForm" action="https://docs.google.com/forms/d/e/1FAIpQLScWb3W6MAxEsc5MR3OxHg4Bq7aQqGCrEDK2J0LpYS7_FIfskA/formResponse" method="POST" target="hidden_iframe" class="soft-glow-card p-6 sm:p-10 space-y-6">
                 
-                <!-- Field 1: Name (Strictly Empty Value) -->
+                <!-- Field 1: Name -->
                 <div>
                     <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
                         姓名 <span class="font-en text-morandi-muted font-normal">NAME</span> <span class="text-red-400">*</span>
@@ -340,7 +340,7 @@
                     <input type="text" name="entry.2084216727" required placeholder="請輸入您的真實姓名" value="" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                 </div>
 
-                <!-- Field 2: Phone (Strictly Empty Value) -->
+                <!-- Field 2: Phone -->
                 <div>
                     <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
                         聯絡電話 <span class="font-en text-morandi-muted font-normal">PHONE</span> <span class="text-red-400">*</span>
@@ -383,37 +383,37 @@
 
                 <!-- Conditional Dynamic Fields (Only visible when attendees > 0) -->
                 <div id="conditionalFields" class="hidden space-y-6 pt-2 border-t border-morandi-borders/50">
-                    <!-- Field 6: Dietary Preferences -->
+                    <!-- Field 6: Dietary Preferences (Corrected Entry ID: 1477990790) -->
                     <div>
                         <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
                             飲食需求 <span class="font-en text-morandi-muted font-normal">DIETARY PREFERENCES</span>
                         </label>
-                        <select name="entry.985449767" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
+                        <select name="entry.1477990790" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                             <option value="全桌葷食">全桌葷食</option>
-                            <option value="素食 1 位">素食 1 位</option>
-                            <option value="素食 2 位">素食 2 位</option>
-                            <option value="素食 3 位以上">素食 3 位以上</option>
+                            <option value="素食1位">素食1位</option>
+                            <option value="素食2位">素食2位</option>
+                            <option value="素食3位以上">素食3位以上</option>
                         </select>
                     </div>
 
-                    <!-- Field 7: Baby Seats -->
+                    <!-- Field 7: Baby Seats (Exact Option Values without space) -->
                     <div>
                         <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
                             兒童椅需求 <span class="font-en text-morandi-muted font-normal">BABY SEATS</span>
                         </label>
                         <select name="entry.1022886529" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                             <option value="不需要">不需要</option>
-                            <option value="需要 1 張">需要 1 張</option>
-                            <option value="需要 2 張">需要 2 張</option>
-                            <option value="需要 3 張以上">需要 3 張以上</option>
+                            <option value="需要1張">需要1張</option>
+                            <option value="需要2張">需要2張</option>
+                            <option value="需要3張以上">需要3張以上</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Field 8: Mailing Address  -->
+                <!-- Field 8: Mailing Address -->
                 <div>
                     <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
-                        喜帖寄送地址 <span class="font-en text-morandi-muted font-normal">ADDRESS / CONTACT</span>
+                        喜帖寄送地址 / LINE ID <span class="font-en text-morandi-muted font-normal">ADDRESS / CONTACT</span>
                     </label>
                     <input type="text" name="entry.923177340" value="" placeholder="如需實體喜帖請填寫寄送地址" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                 </div>
