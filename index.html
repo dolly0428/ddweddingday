@@ -77,7 +77,7 @@
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .accordion-content.open {
-            max-height: 500px;
+            max-height: 600px;
         }
     </style>
 </head>
@@ -267,12 +267,12 @@
         <div class="space-y-4">
             <!-- Accordion Item 1: MRT -->
             <div class="soft-glow-card overflow-hidden">
-                <button class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition">
-                    <div class="flex items-center gap-3">
+                <button type="button" class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition focus:outline-none">
+                    <div class="flex items-center gap-3 pointer-events-none">
                         <i class="fa-solid fa-train-subway text-morandi-gold"></i>
                         <span class="font-medium text-morandi-text"><span class="no-wrap">捷運資訊 MRT</span></span>
                     </div>
-                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300"></i>
+                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300 pointer-events-none"></i>
                 </button>
                 <div class="accordion-content px-6 bg-white">
                     <div class="py-4 text-sm text-morandi-muted leading-relaxed border-t border-morandi-borders/40 space-y-2">
@@ -283,12 +283,12 @@
 
             <!-- Accordion Item 2: Parking -->
             <div class="soft-glow-card overflow-hidden">
-                <button class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition">
-                    <div class="flex items-center gap-3">
+                <button type="button" class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition focus:outline-none">
+                    <div class="flex items-center gap-3 pointer-events-none">
                         <i class="fa-solid fa-square-parking text-morandi-gold"></i>
                         <span class="font-medium text-morandi-text"><span class="no-wrap">自行開車 / 停車資訊 Parking</span></span>
                     </div>
-                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300"></i>
+                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300 pointer-events-none"></i>
                 </button>
                 <div class="accordion-content px-6 bg-white">
                     <div class="py-4 text-sm text-morandi-muted leading-relaxed border-t border-morandi-borders/40 space-y-2">
@@ -300,12 +300,12 @@
 
             <!-- Accordion Item 3: Bus -->
             <div class="soft-glow-card overflow-hidden">
-                <button class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition">
-                    <div class="flex items-center gap-3">
+                <button type="button" class="accordion-header w-full px-6 py-5 flex items-center justify-between text-left hover:bg-morandi-lightgold/30 transition focus:outline-none">
+                    <div class="flex items-center gap-3 pointer-events-none">
                         <i class="fa-solid fa-bus-simple text-morandi-gold"></i>
                         <span class="font-medium text-morandi-text"><span class="no-wrap">公車資訊 Bus</span></span>
                     </div>
-                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300"></i>
+                    <i class="fa-solid fa-chevron-down text-morandi-muted text-sm transition-transform duration-300 pointer-events-none"></i>
                 </button>
                 <div class="accordion-content px-6 bg-white">
                     <div class="py-4 text-sm text-morandi-muted leading-relaxed border-t border-morandi-borders/40 space-y-2">
@@ -326,7 +326,7 @@
                 <p class="text-xs text-morandi-muted mt-2">為了能妥善安排座位與餐點，請於 2026年10月10日前 協助填寫回函，謝謝您！</p>
             </div>
 
-            <!-- Hidden Iframe for Background Form Submission -->
+            <!-- Hidden Iframe for Smooth Background Submission -->
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
             <!-- Embedded Google Form Action URL -->
@@ -451,7 +451,7 @@
             <p class="text-sm text-morandi-muted leading-relaxed mb-6">
                 感謝您的回覆，Duncan & Dolly 非常期待能於婚宴現場與您一同慶祝！
             </p>
-            <button onclick="closeSuccessModal()" class="w-full py-2.5 bg-morandi-gold text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition">
+            <button type="button" id="closeModalBtn" class="w-full py-2.5 bg-morandi-gold text-white rounded-full text-sm font-medium hover:bg-opacity-90 transition">
                 確定關閉
             </button>
         </div>
@@ -459,155 +459,170 @@
 
     <!-- JavaScript Code Logic -->
     <script>
+        // Track Form Submission Status
         var submitted = false;
 
-        // 1. Mobile Navigation Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
+        document.addEventListener('DOMContentLoaded', function () {
+            // 1. Mobile Navigation Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
 
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            mobileMenu.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
                 });
-            });
-        }
 
-        // 2. Cross-Browser Compatible Countdown Timer Logic
-        const targetDate = new Date(2026, 10, 14, 12, 0, 0).getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            const daysEl = document.getElementById('days');
-            const hoursEl = document.getElementById('hours');
-            const minutesEl = document.getElementById('minutes');
-            const secondsEl = document.getElementById('seconds');
-
-            if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
-
-            if (isNaN(distance) || distance <= 0) {
-                daysEl.innerText = "00";
-                hoursEl.innerText = "00";
-                minutesEl.innerText = "00";
-                secondsEl.innerText = "00";
-                return;
+                mobileMenu.querySelectorAll('a').forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // 2. Cross-Browser Compatible Countdown Timer Logic
+            // Target: November 14, 2026 12:00:00 PM (CST)
+            // Note: Month in JS Date constructor is 0-indexed (10 = November)
+            const targetTimeStamp = new Date(2026, 10, 14, 12, 0, 0).getTime();
 
-            daysEl.innerText = String(days).padStart(2, '0');
-            hoursEl.innerText = String(hours).padStart(2, '0');
-            minutesEl.innerText = String(minutes).padStart(2, '0');
-            secondsEl.innerText = String(seconds).padStart(2, '0');
-        }
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetTimeStamp - now;
 
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+                const daysEl = document.getElementById('days');
+                const hoursEl = document.getElementById('hours');
+                const minutesEl = document.getElementById('minutes');
+                const secondsEl = document.getElementById('seconds');
 
-        // 3. Transportation Accordion Toggle Logic
-        document.querySelectorAll('.accordion-header').forEach(button => {
-            button.addEventListener('click', () => {
-                const content = button.nextElementSibling;
-                const icon = button.querySelector('.fa-chevron-down');
-                
-                if (!content) return;
-                const isOpen = content.classList.contains('open');
-                
-                // Close all other accordion contents
-                document.querySelectorAll('.accordion-content').forEach(item => {
-                    item.classList.remove('open');
-                });
-                document.querySelectorAll('.accordion-header .fa-chevron-down').forEach(i => {
-                    i.style.transform = 'rotate(0deg)';
-                });
+                if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
 
-                if (!isOpen) {
-                    content.classList.add('open');
-                    if (icon) icon.style.transform = 'rotate(180deg)';
+                if (isNaN(distance) || distance <= 0) {
+                    daysEl.innerText = "00";
+                    hoursEl.innerText = "00";
+                    minutesEl.innerText = "00";
+                    secondsEl.innerText = "00";
+                    return;
                 }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.innerText = String(days).padStart(2, '0');
+                hoursEl.innerText = String(hours).padStart(2, '0');
+                minutesEl.innerText = String(minutes).padStart(2, '0');
+                secondsEl.innerText = String(seconds).padStart(2, '0');
+            }
+
+            // Initial call and start interval
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
+            // 3. Transportation Accordion Toggle Logic
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(function (button) {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const content = button.nextElementSibling;
+                    if (!content) return;
+
+                    const icon = button.querySelector('.fa-chevron-down');
+                    const isOpen = content.classList.contains('open');
+
+                    // Close all active accordion items
+                    document.querySelectorAll('.accordion-content').forEach(function (item) {
+                        item.classList.remove('open');
+                    });
+                    document.querySelectorAll('.accordion-header .fa-chevron-down').forEach(function (i) {
+                        if (i) i.style.transform = 'rotate(0deg)';
+                    });
+
+                    // Open current item if it was closed
+                    if (!isOpen) {
+                        content.classList.add('open');
+                        if (icon) icon.style.transform = 'rotate(180deg)';
+                    }
+                });
             });
+
+            // 4. Smart Conditional RSVP Logic
+            const attendeesInput = document.getElementById('attendeesInput');
+            const attendanceSelect = document.getElementById('attendanceSelect');
+            const conditionalFields = document.getElementById('conditionalFields');
+
+            function toggleConditionalFields() {
+                if (!attendeesInput || !attendanceSelect || !conditionalFields) return;
+                const attendeesCount = parseInt(attendeesInput.value, 10) || 0;
+                const selectedVal = attendanceSelect.value || '';
+                const isAttending = selectedVal.includes('預計出席') || selectedVal.includes('我要參加');
+
+                if (isAttending && attendeesCount > 0) {
+                    conditionalFields.classList.remove('hidden');
+                } else {
+                    conditionalFields.classList.add('hidden');
+                }
+            }
+
+            if (attendeesInput && attendanceSelect) {
+                attendeesInput.addEventListener('input', toggleConditionalFields);
+                attendanceSelect.addEventListener('change', toggleConditionalFields);
+            }
+
+            // 5. RSVP Form Submission Handler
+            const rsvpForm = document.getElementById('rsvpForm');
+            if (rsvpForm) {
+                rsvpForm.addEventListener('submit', function () {
+                    submitted = true;
+                });
+            }
+
+            // Attach iframe load listener for smooth background submission
+            const hiddenIframe = document.getElementById('hidden_iframe');
+            if (hiddenIframe) {
+                hiddenIframe.addEventListener('load', function () {
+                    if (submitted) {
+                        showSuccessModal();
+                    }
+                });
+            }
+
+            // Modal Functions
+            function showSuccessModal() {
+                const modal = document.getElementById('successModal');
+                if (!modal) return;
+                modal.classList.remove('hidden');
+                setTimeout(function () {
+                    modal.classList.remove('opacity-0');
+                    const modalInner = modal.querySelector('div');
+                    if (modalInner) {
+                        modalInner.classList.remove('scale-95');
+                        modalInner.classList.add('scale-100');
+                    }
+                }, 10);
+            }
+
+            function closeSuccessModal() {
+                const modal = document.getElementById('successModal');
+                if (!modal) return;
+                modal.classList.add('opacity-0');
+                const modalInner = modal.querySelector('div');
+                if (modalInner) {
+                    modalInner.classList.remove('scale-100');
+                    modalInner.classList.add('scale-95');
+                }
+                setTimeout(function () {
+                    modal.classList.add('hidden');
+                    if (rsvpForm) rsvpForm.reset();
+                    toggleConditionalFields();
+                    submitted = false;
+                }, 300);
+            }
+
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeSuccessModal);
+            }
         });
-
-        // 4. Smart Conditional RSVP Logic
-        const attendeesInput = document.getElementById('attendeesInput');
-        const attendanceSelect = document.getElementById('attendanceSelect');
-        const conditionalFields = document.getElementById('conditionalFields');
-
-        function toggleConditionalFields() {
-            if (!attendeesInput || !attendanceSelect || !conditionalFields) return;
-            const attendeesCount = parseInt(attendeesInput.value, 10) || 0;
-            const isAttending = attendanceSelect.value.includes('預計出席') || attendanceSelect.value.includes('我要參加');
-
-            if (isAttending && attendeesCount > 0) {
-                conditionalFields.classList.remove('hidden');
-            } else {
-                conditionalFields.classList.add('hidden');
-            }
-        }
-
-        if (attendeesInput && attendanceSelect) {
-            attendeesInput.addEventListener('input', toggleConditionalFields);
-            attendanceSelect.addEventListener('change', toggleConditionalFields);
-        }
-
-        // Form Submit Logic
-        const rsvpForm = document.getElementById('rsvpForm');
-        if (rsvpForm) {
-            rsvpForm.addEventListener('submit', function() {
-                submitted = true;
-            });
-        }
-
-        // Attach iframe load listener
-        const hiddenIframe = document.getElementById('hidden_iframe');
-        if (hiddenIframe) {
-            hiddenIframe.addEventListener('load', function() {
-                if (submitted) {
-                    showSuccessModal();
-                }
-            });
-        }
-
-        // Modal Functions
-        function showSuccessModal() {
-            const modal = document.getElementById('successModal');
-            if (!modal) return;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                const inner = modal.querySelector('div');
-                if (inner) {
-                    inner.classList.remove('scale-95');
-                    inner.classList.add('scale-100');
-                }
-            }, 10);
-        }
-
-        function closeSuccessModal() {
-            const modal = document.getElementById('successModal');
-            if (!modal) return;
-            modal.classList.add('opacity-0');
-            const inner = modal.querySelector('div');
-            if (inner) {
-                inner.classList.remove('scale-100');
-                inner.classList.add('scale-95');
-            }
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                if (rsvpForm) rsvpForm.reset();
-                toggleConditionalFields();
-                submitted = false;
-            }, 300);
-        }
     </script>
 </body>
 </html>
