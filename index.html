@@ -36,7 +36,7 @@
                     }
                 }
             }
-        }
+        };
     </script>
     <style>
         body {
@@ -326,8 +326,11 @@
                 <p class="text-xs text-morandi-muted mt-2">為了能妥善安排座位與餐點，請於 2026年10月10日前 協助填寫回函，謝謝您！</p>
             </div>
 
+            <!-- Hidden Iframe for Background Form Submission -->
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
             <!-- Embedded Google Form Action URL -->
-            <form id="rsvpForm" action="https://docs.google.com/forms/d/e/1FAIpQLScWb3W6MAxEsc5MR3OxHg4Bq7aQqGCrEDK2J0LpYS7_FIfskA/formResponse" method="POST" class="soft-glow-card p-6 sm:p-10 space-y-6">
+            <form id="rsvpForm" action="https://docs.google.com/forms/d/e/1FAIpQLScWb3W6MAxEsc5MR3OxHg4Bq7aQqGCrEDK2J0LpYS7_FIfskA/formResponse" method="POST" target="hidden_iframe" class="soft-glow-card p-6 sm:p-10 space-y-6">
                 
                 <!-- Field 1: Name -->
                 <div>
@@ -378,7 +381,7 @@
                     <input type="number" id="attendeesInput" name="entry.1658074402" min="0" max="10" value="0" required class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                 </div>
 
-                <!-- Conditional Dynamic Fields (Only visible when attendees > 0) -->
+                <!-- Conditional Dynamic Fields (Only visible when attending & count > 0) -->
                 <div id="conditionalFields" class="hidden space-y-6 pt-2 border-t border-morandi-borders/50">
                     <!-- Field 6: Dietary Preferences -->
                     <div>
@@ -407,15 +410,15 @@
                     </div>
                 </div>
 
-                <!-- Field 8: Mailing Address / Contact (Corrected Entry ID: 628799734) -->
+                <!-- Field 8: Mailing Address / Line ID -->
                 <div>
                     <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
-                        喜帖寄送地址 <span class="font-en text-morandi-muted font-normal">ADDRESS / CONTACT</span>
+                        喜帖寄送地址 / LINE ID <span class="font-en text-morandi-muted font-normal">ADDRESS / CONTACT</span>
                     </label>
                     <input type="text" name="entry.628799734" value="" placeholder="如需實體喜帖請填寫寄送地址" class="w-full px-4 py-3 rounded-lg border border-morandi-borders focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 bg-morandi-bg/40 text-sm">
                 </div>
 
-                <!-- Field 9: Blessings Message (Corrected Entry ID: 1703681185) -->
+                <!-- Field 9: Blessings Message -->
                 <div>
                     <label class="block text-xs font-semibold text-morandi-text tracking-wider uppercase mb-2">
                         給新人祝福的話 <span class="font-en text-morandi-muted font-normal">MESSAGE</span>
@@ -456,16 +459,93 @@
 
     <!-- JavaScript Code Logic -->
     <script>
-        // ... existing navigation & countdown code ...
+        var submitted = false;
 
-        // Smart Conditional RSVP Logic
+        // 1. Mobile Navigation Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        // 2. Cross-Browser Compatible Countdown Timer Logic
+        const targetDate = new Date(2026, 10, 14, 12, 0, 0).getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+            if (isNaN(distance) || distance <= 0) {
+                daysEl.innerText = "00";
+                hoursEl.innerText = "00";
+                minutesEl.innerText = "00";
+                secondsEl.innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            daysEl.innerText = String(days).padStart(2, '0');
+            hoursEl.innerText = String(hours).padStart(2, '0');
+            minutesEl.innerText = String(minutes).padStart(2, '0');
+            secondsEl.innerText = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // 3. Transportation Accordion Toggle Logic
+        document.querySelectorAll('.accordion-header').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('.fa-chevron-down');
+                
+                if (!content) return;
+                const isOpen = content.classList.contains('open');
+                
+                // Close all other accordion contents
+                document.querySelectorAll('.accordion-content').forEach(item => {
+                    item.classList.remove('open');
+                });
+                document.querySelectorAll('.accordion-header .fa-chevron-down').forEach(i => {
+                    i.style.transform = 'rotate(0deg)';
+                });
+
+                if (!isOpen) {
+                    content.classList.add('open');
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // 4. Smart Conditional RSVP Logic
         const attendeesInput = document.getElementById('attendeesInput');
         const attendanceSelect = document.getElementById('attendanceSelect');
         const conditionalFields = document.getElementById('conditionalFields');
 
         function toggleConditionalFields() {
+            if (!attendeesInput || !attendanceSelect || !conditionalFields) return;
             const attendeesCount = parseInt(attendeesInput.value, 10) || 0;
-            const isAttending = attendanceSelect.value.includes('預計出席');
+            const isAttending = attendanceSelect.value.includes('預計出席') || attendanceSelect.value.includes('我要參加');
 
             if (isAttending && attendeesCount > 0) {
                 conditionalFields.classList.remove('hidden');
@@ -474,68 +554,58 @@
             }
         }
 
-        attendeesInput.addEventListener('input', toggleConditionalFields);
-        attendanceSelect.addEventListener('change', toggleConditionalFields);
+        if (attendeesInput && attendanceSelect) {
+            attendeesInput.addEventListener('input', toggleConditionalFields);
+            attendanceSelect.addEventListener('change', toggleConditionalFields);
+        }
 
-        // Robust Fetch Submission directly to Google Forms
+        // Form Submit Logic
         const rsvpForm = document.getElementById('rsvpForm');
-        const submitBtn = document.getElementById('submitBtn');
-
-        rsvpForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent standard page refresh or iframe submission
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> 送出中...';
-
-            const formAction = rsvpForm.action;
-            const formData = new FormData(rsvpForm);
-            const searchParams = new URLSearchParams();
-
-            // Convert FormData to URLSearchParams for application/x-www-form-urlencoded format
-            for (const [key, value] of formData.entries()) {
-                searchParams.append(key, value);
-            }
-
-            // Send via no-cors mode which works universally across all browsers
-            fetch(formAction, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: searchParams.toString()
-            }).then(() => {
-                showSuccessModal();
-            }).catch((err) => {
-                console.error('Submission error:', err);
-                // Fallback to show modal even if network returns opaque response
-                showSuccessModal();
-            }).finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>SUBMIT RSVP / 送出回函</span>';
+        if (rsvpForm) {
+            rsvpForm.addEventListener('submit', function() {
+                submitted = true;
             });
-        });
+        }
+
+        // Attach iframe load listener
+        const hiddenIframe = document.getElementById('hidden_iframe');
+        if (hiddenIframe) {
+            hiddenIframe.addEventListener('load', function() {
+                if (submitted) {
+                    showSuccessModal();
+                }
+            });
+        }
 
         // Modal Functions
         function showSuccessModal() {
             const modal = document.getElementById('successModal');
+            if (!modal) return;
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
-                modal.querySelector('div').classList.remove('scale-95');
-                modal.querySelector('div').classList.add('scale-100');
+                const inner = modal.querySelector('div');
+                if (inner) {
+                    inner.classList.remove('scale-95');
+                    inner.classList.add('scale-100');
+                }
             }, 10);
         }
 
         function closeSuccessModal() {
             const modal = document.getElementById('successModal');
+            if (!modal) return;
             modal.classList.add('opacity-0');
-            modal.querySelector('div').classList.remove('scale-100');
-            modal.querySelector('div').classList.add('scale-95');
+            const inner = modal.querySelector('div');
+            if (inner) {
+                inner.classList.remove('scale-100');
+                inner.classList.add('scale-95');
+            }
             setTimeout(() => {
                 modal.classList.add('hidden');
-                rsvpForm.reset();
+                if (rsvpForm) rsvpForm.reset();
                 toggleConditionalFields();
+                submitted = false;
             }, 300);
         }
     </script>
